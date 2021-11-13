@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { colors } from "./utils/colors";
 import { motion } from "framer-motion";
 import { useHistory } from "react-router-dom";
-import Wave from "./wave.svg";
 import { Canvas } from "@react-three/fiber";
 import Water from "./Water";
 function App() {
@@ -31,6 +30,7 @@ function App() {
           <Icon
             style={{ marginLeft: "10px" }}
             icon={`akar-icons:chevron-${hover ? "down" : "right"}`}
+            height="30px"
           />
         </Button>
       </Mask>
@@ -87,7 +87,7 @@ export const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 20px;
+  font-size: 2.5rem;
   padding: 5px 15px;
   z-index: 2;
   cursor: pointer;
@@ -95,10 +95,9 @@ export const Button = styled.button`
   transition: all 0.3s;
   border: none;
   font-weight: 500;
-  font-size: 3rem;
   outline: none;
   background: ${colors.secondaryAccent};
-  border-radius: 20px;
+  border-radius: 15px;
   color: ${colors.secondary};
   :hover {
     transform: scale(1.1);

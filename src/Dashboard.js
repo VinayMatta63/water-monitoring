@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React, { useState } from "react";
 import styled from "styled-components";
 import Chart from "react-apexcharts";
-import { colors } from "./utils/Colors";
+import { colors } from "./utils/colors";
 
 const Dashboard = () => {
   const [ph, setPh] = useState({
