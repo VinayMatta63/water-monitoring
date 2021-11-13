@@ -1,3 +1,5 @@
+// Shaders Credit : Jonathan Blair - https://codepen.io/knoland/pen/XKxAJb
+
 export const fragmentShader = `
 
 uniform float iGlobalTime;

@@ -1,8 +1,8 @@
 import { AnimatePresence } from "framer-motion";
 import React from "react";
 import { Switch, Route, useLocation } from "react-router-dom";
-import App from "./App";
-import Dashboard from "./Dashboard";
+import Landing from "./components/Landing";
+import Dashboard from "./components/Dashboard";
 
 const Router = () => {
   const location = useLocation();
@@ -13,7 +13,7 @@ const Router = () => {
           <Dashboard />
         </Route>
         <Route path="/">
-          <App />
+          <Landing />
         </Route>
       </Switch>
     </AnimatePresence>

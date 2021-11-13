@@ -1,11 +1,10 @@
 import { useFrame } from "@react-three/fiber";
 import React from "react";
 import { Color, ShaderMaterial, Vector2 } from "three";
-import { fragmentShader, vertexShader } from "./utils/shader";
+import { fragmentShader, vertexShader } from "../utils/shader";
 
 const Water = () => {
   let prevTime = 0;
-
   var timeUniform = {
     iGlobalTime: {
       type: "f",

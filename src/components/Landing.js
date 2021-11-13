@@ -1,12 +1,13 @@
 import React, { Suspense, useState } from "react";
 import { Icon } from "@iconify/react";
 import styled from "styled-components";
-import { colors } from "./utils/colors";
+import { colors } from "../utils/colors.js";
 import { motion } from "framer-motion";
 import { useHistory } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
 import Water from "./Water";
-function App() {
+
+function Landing() {
   const history = useHistory();
   const [hover, setHover] = useState(false);
   return (
@@ -30,7 +31,7 @@ function App() {
           <Icon
             style={{ marginLeft: "10px" }}
             icon={`akar-icons:chevron-${hover ? "down" : "right"}`}
-            height="30px"
+            height="25px"
           />
         </Button>
       </Mask>
@@ -46,7 +47,7 @@ function App() {
   );
 }
 
-export default App;
+export default Landing;
 
 export const Container = styled(motion.div)`
   height: 100vh;
@@ -87,7 +88,7 @@ export const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 2.5rem;
+  font-size: 2rem;
   padding: 5px 15px;
   z-index: 2;
   cursor: pointer;

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React, { useState } from "react";
 import styled from "styled-components";
 import Chart from "react-apexcharts";
-import { colors } from "./utils/colors";
+import { colors } from "../utils/colors";
 
 const Dashboard = () => {
   const [ph, setPh] = useState({
@@ -96,7 +96,7 @@ const Dashboard = () => {
     },
   };
   return (
-    <Container exit={{ y: -1000 }} initial={{ y: 1000 }} animate={{ y: 0 }}>
+    <Container exit={{ y: -2000 }} initial={{ y: 1000 }} animate={{ y: 0 }}>
       <LeftPanel>
         <Header>Water is unhealthy!</Header>
       </LeftPanel>
