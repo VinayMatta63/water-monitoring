@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { removeUser, setUser, setUserDetails } from "./features/userSlice";
 import { child, get, ref } from "firebase/database";
 import { db } from "./firebase";
+import Header from "./components/HeaderComponent";
 
 const Router = () => {
   const location = useLocation();
@@ -47,12 +48,15 @@ const Router = () => {
           <Login />
         </Route>
         <Route path="/team">
+          <Header />
           <Team />
         </Route>
         <Route path="/about">
+          <Header />
           <About />
         </Route>
         <Route path="/dashboard">
+          <Header />
           <Dashboard />
         </Route>
         <Route path="/">

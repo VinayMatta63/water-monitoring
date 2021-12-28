@@ -1,8 +1,10 @@
 export const colors = {
   secondary: "rgb(53, 219, 161)",
   primary: "rgb(142,238,253)",
+  primaryLight: "rgba(142,238,253,0.7)",
   primaryAccent: "rgba(50, 65, 184,0.4)",
   primaryDark: "#3241b8",
+  primaryDarker: "#062340",
   // secondaryAccent: "rgba(53, 219, 161,0.3)",
   secondaryAccent: "rgba(32,82,92,0.7)",
   background:

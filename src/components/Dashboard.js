@@ -3,11 +3,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Chart from "react-apexcharts";
 import { colors } from "../utils/colors";
-import { useDispatch, useSelector } from "react-redux";
-import { removeUser, userSelector } from "../features/userSlice";
+import { useSelector } from "react-redux";
+import { userSelector } from "../features/userSlice";
 import { useHistory } from "react-router";
-import { auth } from "../firebase";
-import { signOut } from "firebase/auth";
 
 const Dashboard = () => {
   const [ph, setPh] = useState({
@@ -102,29 +100,13 @@ const Dashboard = () => {
   };
   const user = useSelector(userSelector);
   const history = useHistory();
-  const dispatch = useDispatch();
   if (!user) {
     history.push("/auth/login");
   }
   return (
     <Container>
       <LeftPanel>
-        <Header
-          onClick={() =>
-            signOut(auth)
-              .then(() => {
-                // Sign-out successful.
-                console.log("Signed Out!!");
-                dispatch(removeUser());
-              })
-              .catch((error) => {
-                // An error happened.
-                console.log(error.message);
-              })
-          }
-        >
-          Water is unhealthy!
-        </Header>
+        <Header>Water is unhealthy!</Header>
       </LeftPanel>
       <Charts>
         <ChartHead>pH</ChartHead>
@@ -168,7 +150,9 @@ export default Dashboard;
 
 export const Container = styled(motion.div)`
   display: flex;
+  flex-direction: column;
   justify-content: flex-end;
+  z-index: -1;
 `;
 export const Charts = styled.div`
   display: flex;
@@ -178,12 +162,8 @@ export const Charts = styled.div`
   margin-top: 20px;
 `;
 export const LeftPanel = styled.div`
-  flex: 0.4;
-  left: 0;
-  position: fixed;
-  background-color: #062340;
+  background-color: ${colors.primaryDarker};
   height: 100vh;
-  width: 40%;
   color: ${colors.primary};
   display: flex;
   flex-direction: column;
