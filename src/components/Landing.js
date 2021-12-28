@@ -10,6 +10,7 @@ import Water from "./Water";
 function Landing() {
   const history = useHistory();
   const [hover, setHover] = useState(false);
+
   return (
     <Container
       initial={{ y: 1000 }}
@@ -61,14 +62,13 @@ export const Container = styled(motion.div)`
 `;
 
 export const Mask = styled.div`
-  height: 100vh;
   width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 50vh;
   position: absolute;
   z-index: 1;
+  margin-top: -5%;
 `;
 export const Header = styled.div`
   font-size: 45px;

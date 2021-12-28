@@ -3,6 +3,11 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Chart from "react-apexcharts";
 import { colors } from "../utils/colors";
+import { useDispatch, useSelector } from "react-redux";
+import { removeUser, userSelector } from "../features/userSlice";
+import { useHistory } from "react-router";
+import { auth } from "../firebase";
+import { signOut } from "firebase/auth";
 
 const Dashboard = () => {
   const [ph, setPh] = useState({
@@ -95,10 +100,31 @@ const Dashboard = () => {
       },
     },
   };
+  const user = useSelector(userSelector);
+  const history = useHistory();
+  const dispatch = useDispatch();
+  if (!user) {
+    history.push("/auth/login");
+  }
   return (
     <Container exit={{ y: -2000 }} initial={{ y: 1000 }} animate={{ y: 0 }}>
       <LeftPanel>
-        <Header>Water is unhealthy!</Header>
+        <Header
+          onClick={() =>
+            signOut(auth)
+              .then(() => {
+                // Sign-out successful.
+                console.log("Signed Out!!");
+                dispatch(removeUser());
+              })
+              .catch((error) => {
+                // An error happened.
+                console.log(error.message);
+              })
+          }
+        >
+          Water is unhealthy!
+        </Header>
       </LeftPanel>
       <Charts>
         <ChartHead>pH</ChartHead>
