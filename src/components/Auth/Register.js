@@ -1,9 +1,5 @@
 import React, { useState } from "react";
-import {
-  signInWithPopup,
-  GoogleAuthProvider,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+import { signInWithPopup, createUserWithEmailAndPassword } from "firebase/auth";
 
 import {
   Container,
@@ -14,6 +10,11 @@ import {
   Form,
   ButtonCover,
   HR,
+  Text,
+  Mask,
+  Heading,
+  SubHeading,
+  HomeButton,
 } from "./Auth.styles";
 import { auth, db, provider } from "../../firebase";
 import { ref, set, get, child } from "firebase/database";
@@ -41,44 +42,47 @@ const Register = () => {
   }
   const handleRegister = (e) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((res) => {
-        const userId = res.user.uid;
-        set(ref(db, "users/" + userId), {
-          name: name,
-          username: telegram,
-          email: email,
-          city: city,
-        });
-        dispatch(setUser(res.user.uid));
-        const dbRef = ref(db);
-        get(child(dbRef, `/users/${res.user.uid}`))
-          .then((snapshot) => {
-            if (snapshot.exists()) {
-              dispatch(setUserDetails(snapshot.val()));
-            } else {
-              dispatch(setUserDetails(null));
-            }
-          })
-          .catch((error) => {
-            console.error(error);
+    if (password === confirm)
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((res) => {
+          const userId = res.user.uid;
+          set(ref(db, "users/" + userId), {
+            name: name,
+            username: telegram,
+            email: email,
+            city: city,
           });
-      })
-      .catch((err) => alert(err.message));
+          dispatch(setUser(res.user.uid));
+          const dbRef = ref(db);
+          get(child(dbRef, `/users/${res.user.uid}`))
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                dispatch(setUserDetails(snapshot.val()));
+              } else {
+                dispatch(setUserDetails(null));
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        })
+        .catch((err) => alert(err.message));
+    else alert("Password and Confirm Password should match");
   };
 
   const handleGoogleLogin = () => {
     signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
+      .then((res) => {
+        dispatch(setUser(res.user.uid));
+        set(ref(db, "users/" + res.user.uid), {
+          name: res.user.displayName,
+          username: "",
+          email: res.user.email,
+          city: "India",
+        });
       })
       .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        const email = error.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log(error.message);
       });
   };
   return (
@@ -150,7 +154,16 @@ const Register = () => {
             Login with Google
           </Button>
         </ButtonCover>
+        <Text>
+          Already registered?
+          <HomeButton href="/auth/login">Click here</HomeButton>
+        </Text>
+        <HomeButton href="/">Home</HomeButton>
       </Form>
+      <Mask>
+        <Heading>Water Quality Monitoring</Heading>
+        <SubHeading>A Tool to monitor drinking water quality.</SubHeading>
+      </Mask>
     </Container>
   );
 };

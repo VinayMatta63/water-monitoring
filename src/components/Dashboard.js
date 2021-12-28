@@ -107,7 +107,7 @@ const Dashboard = () => {
     history.push("/auth/login");
   }
   return (
-    <Container exit={{ y: -2000 }} initial={{ y: 1000 }} animate={{ y: 0 }}>
+    <Container>
       <LeftPanel>
         <Header
           onClick={() =>

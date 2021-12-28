@@ -15,7 +15,7 @@ function Landing() {
     <Container
       initial={{ y: 1000 }}
       animate={{ y: 0, delay: 0.2 }}
-      exit={{ y: -1000 }}
+      // exit={{ y: -1000 }}
     >
       <Mask>
         <Header>Is Water around you Safe?</Header>
@@ -74,14 +74,14 @@ export const Header = styled.div`
   font-size: 45px;
   font-weight: 600;
   z-index: 2;
-  margin-bottom: 20px;
-  color: ${colors.primary};
+  margin-bottom: 10px;
+  color: ${colors.primaryDark};
 `;
 export const Subheader = styled.div`
   margin-bottom: 10px;
   font-weight: 500;
   z-index: 2;
-  color: ${colors.primary};
+  color: ${colors.primaryAccent};
 `;
 
 export const Button = styled.button`
