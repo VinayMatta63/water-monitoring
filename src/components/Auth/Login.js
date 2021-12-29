@@ -104,9 +104,11 @@ const Login = () => {
         </ButtonCover>
         <Text>
           Not registered yet?
-          <HomeButton href="/auth/register">Click here</HomeButton>
+          <HomeButton onClick={() => history.push("/auth/register")}>
+            Click here
+          </HomeButton>
         </Text>
-        <HomeButton href="/">Home</HomeButton>
+        <HomeButton onClick={() => history.push("/")}>Home</HomeButton>
       </Form>
       <Mask>
         <Heading>Water Quality Monitoring</Heading>

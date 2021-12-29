@@ -1,43 +1,22 @@
 import { motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Chart from "react-apexcharts";
 import { colors } from "../utils/colors";
 import { useSelector } from "react-redux";
 import { userSelector } from "../features/userSlice";
 import { useHistory } from "react-router";
+import { onValue, ref } from "@firebase/database";
+import { db } from "../firebase";
 
 const Dashboard = () => {
-  const [ph, setPh] = useState({
-    name: "pH",
-    data: [
-      5.67, 7.71, 5.89, 4.83, 6.54, 5.97, 7.46, 6.6, 7.72, 7.77, 5.26, 4.99,
-      7.78, 7.05, 4.56, 8.08, 6.56, 6.68, 6.93, 7.54, 7.92, 6.03, 4.84, 7.44,
-      5.83, 7.86, 5.99, 7.81, 5.21,
-    ],
-  });
-  const [turbidity, setTurbidity] = useState({
-    name: "Turbidity",
-    data: [
-      0.7, 0.3, 0.75, 0.56, 0.69, 1.28, 0.69, 0.68, 0.64, 0.34, 0.5, 0.27, 0.73,
-      0.5, 0.55, 0.72, 0.31, 0.82, 1.1, 0.48, 1.21, 0.25, 0.68, 0.15, 0.45,
-      0.15, 0.41, 0.34, 0.51,
-    ],
-  });
-  const [tds, setTds] = useState({
-    name: "TDS",
-    data: [
-      280, 342, 464, 545, 468, 133, 446, 333, 333, 180, 512, 279, 242, 288, 303,
-      385, 392, 313, 314, 370, 437, 577, 468, 315, 520, 188, 153, 165, 203,
-    ],
-  });
-  const [temperature, setTemperature] = useState({
-    name: "Temperature",
-    data: [
-      35, 20, 34, 40, 26, 31, 34, 21, 32, 36, 25, 41, 45, 42, 33, 27, 39, 26,
-      44, 36, 35, 24, 22, 26, 42, 43, 38, 38, 25,
-    ],
-  });
+  const [ph, setPh] = useState([]);
+  const [turbidity, setTurbidity] = useState([]);
+  const [tds, setTds] = useState([]);
+  const [temperature, setTemperature] = useState([]);
+  const [time, setTime] = useState([]);
+  const [pred, setPred] = useState(0);
+  const [loader, setLoader] = useState(true);
 
   const options = {
     chart: {
@@ -59,45 +38,45 @@ const Dashboard = () => {
       },
     },
     xaxis: {
-      type: "datetime",
-      categories: [
-        "19-Oct-2021 15:24:38",
-        "19-Oct-2021 15:25:38",
-        "19-Oct-2021 15:26:38",
-        "19-Oct-2021 15:27:38",
-        "19-Oct-2021 15:28:38",
-        "19-Oct-2021 15:29:38",
-        "19-Oct-2021 15:30:38",
-        "19-Oct-2021 15:31:38",
-        "19-Oct-2021 15:32:38",
-        "19-Oct-2021 15:33:38",
-        "19-Oct-2021 15:34:38",
-        "19-Oct-2021 15:35:38",
-        "19-Oct-2021 15:36:38",
-        "19-Oct-2021 15:37:38",
-        "19-Oct-2021 15:38:38",
-        "19-Oct-2021 15:39:38",
-        "19-Oct-2021 15:40:38",
-        "19-Oct-2021 15:41:38",
-        "19-Oct-2021 15:42:38",
-        "19-Oct-2021 15:43:38",
-        "19-Oct-2021 15:44:38",
-        "19-Oct-2021 15:45:38",
-        "19-Oct-2021 15:46:38",
-        "19-Oct-2021 15:47:38",
-        "19-Oct-2021 15:48:38",
-        "19-Oct-2021 15:49:38",
-        "19-Oct-2021 15:50:38",
-        "19-Oct-2021 15:51:38",
-        "19-Oct-2021 15:52:38",
-      ],
-    },
-    tooltip: {
-      x: {
-        format: "dd/MM/yy HH:mm",
-      },
+      type: "time",
+      categories: time,
     },
   };
+  const dbRef = ref(db, "Sensor");
+  useEffect(() => {
+    const phArray = [];
+    const turbArray = [];
+    const tdsArray = [];
+    const tempArray = [];
+    const timeArray = [];
+    onValue(dbRef, (snapshot) => {
+      snapshot.forEach(
+        (childSnapshot) => {
+          // const childKey = childSnapshot.key;
+          const childData = childSnapshot.val();
+          phArray.push(childData.pH);
+          turbArray.push(childData.Turbidity);
+          tdsArray.push(childData.TDS);
+          tempArray.push(childData.Temperature);
+          const timeD = new Date(childData.timestamp).toLocaleTimeString(
+            "en-US"
+          );
+          timeArray.push(timeD);
+          setPred(childData.Prediction);
+        },
+        {
+          onlyOnce: true,
+        }
+      );
+      setPh(phArray);
+      setTds(tdsArray);
+      setTemperature(tempArray);
+      setTurbidity(turbArray);
+      setTime(timeArray);
+      setLoader(false);
+    });
+  }, [dbRef]);
+
   const user = useSelector(userSelector);
   const history = useHistory();
   if (!user) {
@@ -106,13 +85,22 @@ const Dashboard = () => {
   return (
     <Container>
       <LeftPanel>
-        <Header>Water is unhealthy!</Header>
+        {loader ? (
+          <Img src="/loader.gif" />
+        ) : (
+          <>
+            <Img src={pred === 1 ? "/yo.gif" : "/no.gif"} />
+            <Header>
+              {pred === 1 ? "Water is healthy!" : "Water is unhealthy! "}
+            </Header>
+          </>
+        )}
       </LeftPanel>
       <Charts>
         <ChartHead>pH</ChartHead>
         <Chart
           options={{ ...options, colors: ["blue"] }}
-          series={[ph]}
+          series={[{ name: "pH", data: ph }]}
           type="area"
           height={350}
           width={700}
@@ -120,7 +108,7 @@ const Dashboard = () => {
         <ChartHead>Turbidity</ChartHead>
         <Chart
           options={{ ...options, colors: ["green"] }}
-          series={[turbidity]}
+          series={[{ name: "Turbidity", data: turbidity }]}
           type="area"
           height={350}
           width={700}
@@ -128,7 +116,7 @@ const Dashboard = () => {
         <ChartHead>TDS</ChartHead>
         <Chart
           options={{ ...options, colors: ["orange"] }}
-          series={[tds]}
+          series={[{ name: "TDS", data: tds }]}
           type="area"
           height={350}
           width={700}
@@ -136,7 +124,7 @@ const Dashboard = () => {
         <ChartHead>Temperature</ChartHead>
         <Chart
           options={{ ...options, colors: ["purple"] }}
-          series={[temperature]}
+          series={[{ name: "Tempertaure", data: temperature }]}
           type="area"
           height={350}
           width={700}
@@ -181,3 +169,4 @@ export const ChartHead = styled.h2`
   font-size: 28px;
   color: #062340;
 `;
+export const Img = styled.img``;

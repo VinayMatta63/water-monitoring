@@ -156,9 +156,11 @@ const Register = () => {
         </ButtonCover>
         <Text>
           Already registered?
-          <HomeButton href="/auth/login">Click here</HomeButton>
+          <HomeButton onClick={() => history.push("/auth/login")}>
+            Click here
+          </HomeButton>
         </Text>
-        <HomeButton href="/">Home</HomeButton>
+        <HomeButton onClick={() => history.push("/")}>Home</HomeButton>
       </Form>
       <Mask>
         <Heading>Water Quality Monitoring</Heading>

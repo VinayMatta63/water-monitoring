@@ -5,8 +5,10 @@ import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import { removeUser } from "../features/userSlice";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 const Header = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   return (
     <Container>
       <Left>
@@ -16,9 +18,9 @@ const Header = () => {
         <Title>Water Quality Monitoring</Title>
       </Left>
       <Nav>
-        <Link>Report</Link>
-        <Link href="/about">About</Link>
-        <Link href="/team">Team</Link>
+        <Link onClick={() => history.push("/dashboard")}>Report</Link>
+        <Link onClick={() => history.push("/about")}>About</Link>
+        <Link onClick={() => history.push("/team")}>Team</Link>
         <Button
           onClick={() =>
             signOut(auth)

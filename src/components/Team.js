@@ -1,5 +1,8 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useHistory } from "react-router";
 import styled from "styled-components";
+import { userSelector } from "../features/userSlice";
 import { colors } from "../utils/colors";
 import Member from "./Member";
 const members = [
@@ -31,6 +34,11 @@ const members = [
   },
 ];
 const Team = () => {
+  const user = useSelector(userSelector);
+  const history = useHistory();
+  if (!user) {
+    history.push("/auth/login");
+  }
   return (
     <Container>
       <Member details={members[0]} />
