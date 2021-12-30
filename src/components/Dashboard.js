@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Chart from "react-apexcharts";
+import emailjs, { init } from "@emailjs/browser";
 import { colors } from "../utils/colors";
 import { useSelector } from "react-redux";
 import { userSelector } from "../features/userSlice";
@@ -17,7 +18,9 @@ const Dashboard = () => {
   const [time, setTime] = useState([]);
   const [pred, setPred] = useState(0);
   const [loader, setLoader] = useState(true);
+  init("user_17qVtiq6xe41za2gOtcZm");
 
+  const user = useSelector(userSelector);
   const options = {
     chart: {
       height: 350,
@@ -43,6 +46,7 @@ const Dashboard = () => {
     },
   };
   const dbRef = ref(db, "Sensor");
+
   useEffect(() => {
     const phArray = [];
     const turbArray = [];
@@ -50,8 +54,10 @@ const Dashboard = () => {
     const tempArray = [];
     const timeArray = [];
     onValue(dbRef, (snapshot) => {
+      let i = 0;
       snapshot.forEach(
         (childSnapshot) => {
+          i += 1;
           // const childKey = childSnapshot.key;
           const childData = childSnapshot.val();
           phArray.push(childData.pH);
@@ -63,6 +69,41 @@ const Dashboard = () => {
           );
           timeArray.push(timeD);
           setPred(childData.Prediction);
+          if (i === snapshot.size) {
+            let templateParams = {
+              to_name: "Vinay Matta",
+              from_name: "WQM System",
+              message:
+                childData.Prediction === 1
+                  ? `
+                  Water is Healthy!,\n
+                  TDS: ${childData.TDS}, \n
+                  Temperature: ${childData.Temperature},\n
+                  Turbidity: ${childData.Turbidity},\n
+                  PH:${childData.pH},\n
+                  Time:${timeD}\n
+                `
+                  : `
+                Water is Unhealthy!,\n
+                TDS: ${childData.TDS},\n
+                Temperature: ${childData.Temperature},\n
+                Turbidity: ${childData.Turbidity},\n
+                PH:${childData.pH},\n
+                Time:${timeD}
+              `,
+            };
+            emailjs
+              .send(
+                "service_hikdnjc",
+                "template_1nkkug7",
+                templateParams,
+                "user_17qVtiq6xe41za2gOtcZm"
+              )
+              .then((res) => console.log(res))
+              .catch((error) => {
+                console.log(error.message);
+              });
+          }
         },
         {
           onlyOnce: true,
@@ -75,9 +116,7 @@ const Dashboard = () => {
       setTime(timeArray);
       setLoader(false);
     });
-  }, [dbRef]);
-
-  const user = useSelector(userSelector);
+  }, []);
   const history = useHistory();
   if (!user) {
     history.push("/auth/login");
