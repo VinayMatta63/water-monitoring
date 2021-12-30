@@ -92,17 +92,17 @@ const Dashboard = () => {
                 Time:${timeD}
               `,
             };
-            emailjs
-              .send(
-                "service_hikdnjc",
-                "template_1nkkug7",
-                templateParams,
-                "user_17qVtiq6xe41za2gOtcZm"
-              )
-              .then((res) => console.log(res))
-              .catch((error) => {
-                console.log(error.message);
-              });
+            // emailjs
+            //   .send(
+            //     "service_hikdnjc",
+            //     "template_1nkkug7",
+            //     templateParams,
+            //     "user_17qVtiq6xe41za2gOtcZm"
+            //   )
+            //   .then((res) => console.log(res))
+            //   .catch((error) => {
+            //     console.log(error.message);
+            //   });
           }
         },
         {
@@ -128,46 +128,71 @@ const Dashboard = () => {
           <Img src="/loader.gif" />
         ) : (
           <>
-            <Img src={pred === 1 ? "/yo.gif" : "/no.gif"} />
-            <Header>
-              {pred === 1 ? "Water is healthy!" : "Water is unhealthy! "}
-            </Header>
+            <Main>
+              <Bubble>PH : {ph[ph.length - 1]}</Bubble>
+              <Bubble>
+                Temperature : {temperature[temperature.length - 1]}
+              </Bubble>
+            </Main>
+            <Main>
+              <Img src={pred === 1 ? "/yo.gif" : "/no.gif"} />
+              <Header>
+                {pred === 1 ? "Water is healthy!" : "Water is unhealthy! "}
+              </Header>
+              <Subheader>Scroll down to view more</Subheader>
+            </Main>
+            <Main>
+              <Bubble>Turbidity : {turbidity[turbidity.length - 1]}</Bubble>
+              <Bubble>TDS : {tds[tds.length - 1]}</Bubble>
+            </Main>
           </>
         )}
       </LeftPanel>
       <Charts>
-        <ChartHead>pH</ChartHead>
-        <Chart
-          options={{ ...options, colors: ["blue"] }}
-          series={[{ name: "pH", data: ph }]}
-          type="area"
-          height={350}
-          width={700}
-        />
-        <ChartHead>Turbidity</ChartHead>
-        <Chart
-          options={{ ...options, colors: ["green"] }}
-          series={[{ name: "Turbidity", data: turbidity }]}
-          type="area"
-          height={350}
-          width={700}
-        />
-        <ChartHead>TDS</ChartHead>
-        <Chart
-          options={{ ...options, colors: ["orange"] }}
-          series={[{ name: "TDS", data: tds }]}
-          type="area"
-          height={350}
-          width={700}
-        />
-        <ChartHead>Temperature</ChartHead>
-        <Chart
-          options={{ ...options, colors: ["purple"] }}
-          series={[{ name: "Tempertaure", data: temperature }]}
-          type="area"
-          height={350}
-          width={700}
-        />
+        <ChartCover>
+          <ChartCover>
+            <ChartHead>pH</ChartHead>
+            <Chart
+              options={{ ...options, colors: ["blue"] }}
+              series={[{ name: "pH", data: ph }]}
+              type="area"
+              height={350}
+              width={550}
+            />
+          </ChartCover>
+          <ChartCover>
+            <ChartHead>Turbidity</ChartHead>
+            <Chart
+              options={{ ...options, colors: ["green"] }}
+              series={[{ name: "Turbidity", data: turbidity }]}
+              type="area"
+              height={350}
+              width={550}
+            />
+          </ChartCover>
+        </ChartCover>
+        <ChartCover>
+          <ChartCover>
+            <ChartHead>TDS</ChartHead>
+            <Chart
+              options={{ ...options, colors: ["orange"] }}
+              series={[{ name: "TDS", data: tds }]}
+              type="area"
+              height={350}
+              width={550}
+            />
+          </ChartCover>
+          <ChartCover>
+            <ChartHead>Temperature</ChartHead>
+            <Chart
+              options={{ ...options, colors: ["purple"] }}
+              series={[{ name: "Tempertaure", data: temperature }]}
+              type="area"
+              height={350}
+              width={550}
+            />
+          </ChartCover>
+        </ChartCover>
       </Charts>
     </Container>
   );
@@ -184,7 +209,8 @@ export const Container = styled(motion.div)`
 export const Charts = styled.div`
   display: flex;
   align-items: center;
-  flex-direction: column;
+  justify-content: space-evenly;
+  /* flex-direction: column; */
   flex: 0.6;
   margin-top: 20px;
 `;
@@ -193,7 +219,6 @@ export const LeftPanel = styled.div`
   height: 100vh;
   color: ${colors.primary};
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
@@ -209,3 +234,32 @@ export const ChartHead = styled.h2`
   color: #062340;
 `;
 export const Img = styled.img``;
+export const Subheader = styled.div`
+  font-size: 12px;
+  margin-top: 50px;
+`;
+export const ChartCover = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+export const Main = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 300px;
+`;
+export const Bubble = styled.div`
+  display: flex;
+  width: 100%;
+  color: ${colors.primary};
+  background-color: ${colors.secondaryAccent};
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
+    rgba(255, 255, 255, 0.3) 0px 30px 60px -30px,
+    rgba(245, 218, 189, 0.35) 0px -2px 6px 0px inset;
+  margin-bottom: 10px;
+`;
