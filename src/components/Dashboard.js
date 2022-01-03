@@ -92,17 +92,17 @@ const Dashboard = () => {
                 Time:${timeD}
               `,
             };
-            // emailjs
-            //   .send(
-            //     "service_hikdnjc",
-            //     "template_1nkkug7",
-            //     templateParams,
-            //     "user_17qVtiq6xe41za2gOtcZm"
-            //   )
-            //   .then((res) => console.log(res))
-            //   .catch((error) => {
-            //     console.log(error.message);
-            //   });
+            emailjs
+              .send(
+                "service_hikdnjc",
+                "template_1nkkug7",
+                templateParams,
+                "user_17qVtiq6xe41za2gOtcZm"
+              )
+              .then((res) => console.log(res))
+              .catch((error) => {
+                console.log(error.message);
+              });
           }
         },
         {
@@ -117,10 +117,12 @@ const Dashboard = () => {
       setLoader(false);
     });
   }, []);
+
   const history = useHistory();
   if (!user) {
     history.push("/auth/login");
   }
+
   return (
     <Container>
       <LeftPanel>
@@ -136,7 +138,12 @@ const Dashboard = () => {
             </Main>
             <Main>
               <Img src={pred === 1 ? "/yo.gif" : "/no.gif"} />
-              <Header>
+              <Header
+                pred={pred}
+                animate={{ opacity: 1, y: 20 }}
+                transition={{ repeat: Infinity, duration: 1 }}
+                initial={{ opacity: 0 }}
+              >
                 {pred === 1 ? "Water is healthy!" : "Water is unhealthy! "}
               </Header>
               <Subheader>Scroll down to view more</Subheader>
@@ -222,9 +229,11 @@ export const LeftPanel = styled.div`
   align-items: center;
   justify-content: center;
 `;
-export const Header = styled.h2`
+export const Header = styled(motion.h2)`
   font-weight: 500;
   font-size: 28px;
+  padding-top: 20px;
+  ${(props) => (props.pred === 0 ? "color:salmon;" : "")};
 `;
 
 export const ChartHead = styled.h2`
@@ -233,7 +242,10 @@ export const ChartHead = styled.h2`
   font-size: 28px;
   color: #062340;
 `;
-export const Img = styled.img``;
+export const Img = styled.img`
+  margin: 0 10px;
+  border-radius: 5px;
+`;
 export const Subheader = styled.div`
   font-size: 12px;
   margin-top: 50px;
