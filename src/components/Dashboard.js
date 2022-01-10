@@ -48,12 +48,12 @@ const Dashboard = () => {
   const dbRef = ref(db, "Sensor");
 
   useEffect(() => {
-    const phArray = [];
-    const turbArray = [];
-    const tdsArray = [];
-    const tempArray = [];
-    const timeArray = [];
     onValue(dbRef, (snapshot) => {
+      const phArray = [];
+      const turbArray = [];
+      const tdsArray = [];
+      const tempArray = [];
+      const timeArray = [];
       let i = 0;
       snapshot.forEach(
         (childSnapshot) => {
